@@ -8,15 +8,21 @@
 #include "room_layouts.h"
 #include "globals.h"
 
-using std::vector;
 using std::string;
 
-void color_maker(vector<vector<int>> &room_color) {
+void color_maker(int room_color[height][width]) {
     for (int i=0; i < height; i++) {
     	for (int j=0; j < width; j++) {
     		room_color[i][j] = (rand() % 3 < 2) ? 1 : 0; //Randomly assigns a value to the room_color array, with the majority being 1
 		}
 	}
+}
+
+void setCursorPosition(int x, int y) { //Resets the room
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
 void initialize_code() {
@@ -33,14 +39,7 @@ void initialize_code() {
 	}
 }
 
-void setCursorPosition(int x, int y) { //Resets the room
-    COORD coord;
-    coord.X = x;
-    coord.Y = y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-}
-
-void print_room(vector<vector<int>> room_color, vector<string> room_layout) {
+void print_room(int room_color[height][width], string room_layout[height]) {
 	if (maze_flag) return; //Disabling the standard print process for the maze room, that has its own function
 	for (int i = 0; i < height; i++) {
 		string colored_string = "\0";
@@ -54,10 +53,10 @@ void print_room(vector<vector<int>> room_color, vector<string> room_layout) {
                     colored_string += LIGHT_GRAY; break;
                 case '*': colored_string += YELLOW; break;
                 case 'X': colored_string += RED; break;
-                case 'O': colored_string += LIME;break;
+                case 'O': colored_string += LIME; break;
                 case '_':
                 case '/':
-                case '\\': colored_string += SILVER;break;
+                case '\\': colored_string += SILVER; break;
                 case '-':
                 case '|': colored_string += ORANGE; break;
                 case '^': colored_string += WHITE; break;
@@ -217,6 +216,10 @@ void room_interactions() {
 				laser_path();
 			}
 			break;
+		case 3:
+			break;
+		case 4:
+			break;
 	}
 }
 
@@ -287,11 +290,12 @@ void room_updates(int* x_pos, int* y_pos) {
 		case 3:
 			maze_functionality();
 			break;
+		case 4:
+			break;
 	}
 }
 
-
-void player_action(int *x_pos, int *y_pos, vector<string> &room_layout) {
+void player_action(int *x_pos, int *y_pos, string room_layout[height]) {
 	temp_x = *x_pos;
 	temp_y = *y_pos;
 	while (temp_x == *x_pos && temp_y == *y_pos) { //While the player hasn't moved...
@@ -307,10 +311,14 @@ void player_action(int *x_pos, int *y_pos, vector<string> &room_layout) {
 				(*x_pos)--;
 			} else if (user_input == 101) { //E interact
 				room_interactions();
+		    	setCursorPosition(0, 0);
+				print_room(room_color[room_number], &room_layout[room_number]);
+   				std::cout << "\033[?25l";
 			}
 			room_updates(x_pos, y_pos);
 		}
 	}
+	
 }
 
 int main(void) {
