@@ -93,12 +93,15 @@ int check_adjacent(char symbol, int y_pos, int x_pos) {
 
 void maze_functionality() {
     char approximately_adjacent[7][7];
-    for (int i = 0; i < 7; i++) {
-        for (int j = 0; j < 7; j++) {
-            approximately_adjacent[i][j] = room_layout[room_number][i + y_pos - 3][j + x_pos - 3]; //Storing the player's immediate surroundings in an array
-        }
-    }
-    char adjacent_colored_string[17 * 7];
+	for (int i = 0; i < 7; i++) {
+	    for (int j = 0; j < 7; j++) {
+	        int row = i + y_pos - 3;
+	        int col = j + x_pos - 3;
+	        if (row >= 0 && row < height && col >= 0 && col < width) {
+	            approximately_adjacent[i][j] = room_layout[room_number][row][col];
+	        }
+	    }
+	}
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             if ((y >= y_pos - 3 && y <= y_pos + 3) && (x >= x_pos - 3 && x <= x_pos + 3)) {
@@ -120,6 +123,7 @@ void maze_functionality() {
         std::cout << "\n";
     }
 }
+
 
 void laser_path() {
 	light_y_pos = 21;
@@ -312,7 +316,7 @@ void player_action(int *x_pos, int *y_pos, string room_layout[height]) {
 			} else if (user_input == 101) { //E interact
 				room_interactions();
 		    	setCursorPosition(0, 0);
-				print_room(room_color[room_number], &room_layout[room_number]);
+				print_room(room_color[room_number], room_layout);
    				std::cout << "\033[?25l";
 			}
 			room_updates(x_pos, y_pos);
