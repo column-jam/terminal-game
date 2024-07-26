@@ -5,8 +5,6 @@
 #define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
 #endif
 
-#include <string>
-
 constexpr const char* GRAY = "\u001b[38;5;242m";
 constexpr const char* GRAY_BUT_LIGHTER = "\u001b[38;5;244m";
 constexpr const char* LIGHT_GRAY = "\u001b[38;5;247m";
@@ -19,9 +17,8 @@ constexpr const char* PURPLE = "\u001b[38;5;129m";
 constexpr const char* ORANGE = "\u001b[38;5;208m";
 constexpr const char* RESET = "\u001b[0m";
 
-int x_pos = 60, y_pos = 24, room_number = 2, temp_x, temp_y;
-int flag_first_room_button_text, flag_first_room_door_text, flag_second_room_mirror_text, flag_second_room_button_one, flag_second_room_button_two, flag_third_room_light_text, flag_mirror_turned, maze_flag;
+int x_pos = 60, y_pos = 20, room_number = 0;
+int pause_flag, flag_first_room_button_text, flag_first_room_door_text, flag_second_room_mirror_text, maze_flag;
 int room_color[room_amount][height][width];
-std::string room_two_but_technically_the_third_copy[height];
 
 #endif // globals_h
